@@ -1,0 +1,13 @@
+# phpstorm project files
+.idea
+
+# windows thumbnail cache
+Thumbs.db
+
+#npm packages
+/**/node_modules
+
+/public
+/dist
+
+
