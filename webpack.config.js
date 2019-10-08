@@ -16,16 +16,21 @@ module.exports = {
         //app: './src/es6/app.js',
         app: [
             "./src/es6/classes/FrameInterface",
+            "./src/es6/classes/FramePointer",
             "./src/es6/classes/LandingFrame",
+            "./src/es6/classes/LandingFrameComponent",
+            "./src/es6/classes/FrameSwitchEffect",
+            "./src/es6/classes/LandingBuilderBase",
         ],
+        test: "./src/es6/app"
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'laco.js',
+        //filename: 'laco.js',
         library: 'LACO',
-        libraryTarget: 'umd'
-        //chunkFilename: 'js/[name].bundle.js',
-        //filename: '[name].[contenthash].bundle.js'
+        libraryTarget: 'umd',
+        chunkFilename: 'js/[name].bundle.js',
+        filename: '[name].[contenthash].bundle.js'
     },
     externals: {
         lodash: {
@@ -51,11 +56,11 @@ module.exports = {
         //             name: 'vendors',
         //             chunks: 'all'
         //         },
-        //         lb: {
-        //             test: './src/es6/landing-skeleton.js',
-        //             name: 'lb',
-        //             chunks: 'all',
-        //         }
+        //         // lb: {
+        //         //     test: './src/es6/landing-skeleton.js',
+        //         //     name: 'lb',
+        //         //     chunks: 'all',
+        //         // }
         //     }
         // },
          minimizer: [
@@ -81,12 +86,12 @@ module.exports = {
         //     filename: "css/[name].bundle.css",
         //     chunkFilename: "css/[id].bundle.css"
         // }),
-        // new webpack.ProvidePlugin({
-        //     $: "jquery",
-        //     _: "lodash",
-        //     jQuery: "jquery",
-        //     "window.jQuery": "jquery"
-        // }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            _: "lodash",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        }),
         // new webpack.DefinePlugin({
         //     PRODUCTION: JSON.stringify(false),
         // }),
