@@ -32,6 +32,9 @@ export const FrameInterface = (function () {
      * Class FrameInterface
      */
     class FrameInterface {
+        /**
+         * Constructor
+         */
         constructor() {
             /**
              * Keeps state of frame interface object
@@ -44,6 +47,7 @@ export const FrameInterface = (function () {
              * @type {FrameInterface[]}
              */
             this._frameComponents = [];
+
             /**
              * FrameInterface actions callbacks arrays
              * @type {Array}
@@ -104,14 +108,14 @@ export const FrameInterface = (function () {
             this._waitRepeat = true;
             /**
              * Keeps state of previous display size
-             * Needed for correct trigger onSwitchOnMobile and onSwitchOnDesctop events
+             * Needed for correct trigger onSwitchOnMobile and onSwitchOnDesktop events
              * @type {number}
              * @private
              */
             this._currentDisplayState = 0;
             /**
              * Keeps state of previous bootstrap display size
-             * Needed for correct trigger bootstrap events
+             * Needed for correct trigger bootstrap resize events
              * @type {number}
              * @private
              */
@@ -561,6 +565,15 @@ export const FrameInterface = (function () {
          */
         addFrameComponent(frameComponent) {
             this._frameComponents.push(frameComponent);
+        }
+
+        /**
+         * Remove frame component from queue of implementation
+         * But not destroy frame component
+         * @param {string} name
+         */
+        removeFrameComponent(name) {
+            //TODO: make this method
         }
 
         /**

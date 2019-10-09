@@ -1,4 +1,5 @@
 import { FramePointer } from "./FramePointer";
+export { FramePointer } from "./FramePointer";
 
 /**
  * Class LandingBuilder
@@ -18,6 +19,8 @@ import { FramePointer } from "./FramePointer";
  * @type {FrameSwitchEffect}
  */
 export const LandingBuilderBase = (function () {
+    const DEFAULT_THEME = 0;
+
     /**
      * Class LandingBuilderBase
      */
@@ -29,23 +32,27 @@ export const LandingBuilderBase = (function () {
             /**
              * Array of existed landing frames
              * @type {LandingFrame[]}
+             * @private
              */
-            this.frames = [];
+            this._frames = [];
             /**
              * Current active frame
              * @type {LandingFrame}|null
+             * @private
              */
-            this.activeFrame = null;
+            this._activeFrame = null;
             /**
              * Current background frame
              * @type {LandingFrame}|null
+             * @private
              */
-            this.backGroundFrame = null;
+            this._backGroundFrame = null;
             /**
              * Current menu frame
              * @type {MenuFrame}
+             * @private
              */
-            this.menuFrame = null;
+            this._menuFrame = null;
             /**
              * List of FrameSwitchEffect concrete classes
              * @type {FrameSwitchEffect[]}
@@ -64,6 +71,13 @@ export const LandingBuilderBase = (function () {
              */
             this._isSwithcAble = true;
 
+            /**
+             * Keep current site theme
+             * @type {number}
+             * @private
+             */
+            this._currentTheme = DEFAULT_THEME;
+
             //global pointer callbacks
             this._mouseMoveCallbacks       = [];
             this._mouseActiveMoveCallbacks = [];
@@ -79,8 +93,10 @@ export const LandingBuilderBase = (function () {
             this._clickCallbacks           = [];
             this._switchCallbaks           = [];
 
+            this._switchThemeCallbacks     = [];
+
             //Add default switch effect
-            this.addSwitchClass(new DefaultSwitchEffect(this));
+            //this.addSwitchClass(new DefaultSwitchEffect(this));
 
             /**
              * Landing builder must proxy window resize event to needed frames
@@ -266,6 +282,18 @@ export const LandingBuilderBase = (function () {
          */
         onSwitch(callback, isOnce = false) {
             this._switchCallbaks.push([
+                callback,
+                isOnce
+            ]);
+        }
+
+        /**
+         * Hang callback on switch theme event
+         * @param callback
+         * @param isOnce
+         */
+        onSwitchTheme(callback, isOnce = false) {
+            this._switchThemeCallbacks.push([
                 callback,
                 isOnce
             ]);

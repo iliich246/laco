@@ -7,8 +7,14 @@ import {FramePointer} from "./FramePointer";
 //const FrameInterface = require('./FrameInterface');
 
 /**
- * Class of frame
- * This some kind of abstract class and must be used only inherited classes
+ * Class LandingFrame
+ *
+ * This class is base of laco frames
+ * For use this class you must inherit them in your class
+ * For example:
+ *
+ * class YourClass extends LandingFrame { ...
+ *
  * @type {LandingFrame}
  */
 export const LandingFrame = (function () {
@@ -30,10 +36,10 @@ export const LandingFrame = (function () {
         constructor(frameContainer, landingBuilder) {
             super();
 
-            this.landingBuilder = landingBuilder;
-            this.frameContainer = frameContainer;
+            this._landingBuilder = landingBuilder;
+            this._frameContainer = frameContainer;
 
-            this.switchEffectName = $(this.frameContainer).data('switchClass');
+            this._switchEffectName = $(this._frameContainer).data('switchClass');
 
             //hammer callbacks
             this._swipeLeftCallbacks  = [];
@@ -72,9 +78,9 @@ export const LandingFrame = (function () {
         initialization() {
             super.initialization();
 
-            this._pointer = new FramePointer(this, this.frameContainer);
+            this._pointer = new FramePointer(this, this._frameContainer);
 
-            this._hammer = new Hammer(this.frameContainer);
+            this._hammer = new Hammer(this._frameContainer);
             this._hammer.get('swipe').set({direction: Hammer.DIRECTION_ALL});
 
             this._hammer.on('swipeleft', (event) => {
@@ -197,7 +203,7 @@ export const LandingFrame = (function () {
                 }
             });
 
-            $(this.frameContainer).on('mousewheel', (event) => {
+            $(this._frameContainer).on('mousewheel', (event) => {
                 if (this.state === STATE_OFF) return;
 
                 if (event.originalEvent.deltaY < 0) {//wheel up
@@ -239,7 +245,7 @@ export const LandingFrame = (function () {
          * @returns {FramePointer}
          */
         getGlobalPointer() {
-            return this.landingBuilder.getGlobalPointer();
+            return this._landingBuilder.getGlobalPointer();
         }
 
         /**
@@ -247,7 +253,7 @@ export const LandingFrame = (function () {
          * @returns {LandingBuilder}
          */
         getLandingBuilder() {
-            return this.landingBuilder;
+            return this._landingBuilder;
         }
 
         /**

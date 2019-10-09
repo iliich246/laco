@@ -27,19 +27,19 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         //filename: 'laco.js',
-        library: 'LACO',
-        libraryTarget: 'umd',
+        //library: 'LACO',
+        //libraryTarget: 'umd',
         chunkFilename: 'js/[name].bundle.js',
         filename: '[name].[contenthash].bundle.js'
     },
-    externals: {
-        lodash: {
-           commonjs: 'lodash',
-           commonjs2: 'lodash',
-           amd: 'lodash',
-           root: '_'
-         }
-    },
+    // externals: {
+    //     lodash: {
+    //        commonjs: 'lodash',
+    //        commonjs2: 'lodash',
+    //        amd: 'lodash',
+    //        root: '_'
+    //      }
+    // },
     devtool: 'inline-source-map',
     devServer: {
         contentBase: './dist',

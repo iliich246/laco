@@ -4,7 +4,8 @@ import Hammer from 'hammerjs';
  * Class Pointer
  *
  * This class describe universal pointer object that`s used
- * in LandingFrame class objects
+ * in LandingFrame class objects. It`s unite mouse cursor and touch
+ * in uniform object.
  *
  * @type {FramePointer}
  */
@@ -12,13 +13,13 @@ export const FramePointer = (function () {
     const LAST_TOUCH = 1;
     const LAST_MOUSE = 0;
 
-    const ACTION_CLICK = 0;
-    const ACTION_MOUSE_MOVE = 1;
-    const ACTION_MOUSE_DOWN = 2;
-    const ACTION_MOUSE_UP = 3;
+    const ACTION_CLICK       = 0;
+    const ACTION_MOUSE_MOVE  = 1;
+    const ACTION_MOUSE_DOWN  = 2;
+    const ACTION_MOUSE_UP    = 3;
     const ACTION_TOUCH_START = 4;
-    const ACTION_TOUCH_END = 5;
-    const ACTION_TOUCH_MOVE = 6;
+    const ACTION_TOUCH_END   = 5;
+    const ACTION_TOUCH_MOVE  = 6;
 
     const ACTION_TO_STRING_ARRAY = [
         'click',
@@ -56,7 +57,7 @@ export const FramePointer = (function () {
              * on touch panel moved)
              * @type {boolean}
              */
-            this.pointerIsActive = false;
+            this._pointerIsActive = false;
             /**
              * Pointer x coordinate regarding LandingFrame
              * @type {number}
@@ -181,7 +182,7 @@ export const FramePointer = (function () {
              * @type {number}
              * @private
              */
-            this._lastPoinerDevice = LAST_TOUCH;
+            this._lastPointerDevice = LAST_TOUCH;
 
             if (!this._pointerHandler) return;
 
@@ -190,8 +191,6 @@ export const FramePointer = (function () {
             this._hammer.on('tap', (event) => {
                 this._lastClickX = event.center.x;
                 this._lastClickY = event.center.y;
-
-                //console.log(event);
 
                 for (let i = 0; i < this._pointerHandler._clickCallbacks.length; i++) {
                     let currentCallback = this._pointerHandler._clickCallbacks[i][0];
@@ -265,7 +264,7 @@ export const FramePointer = (function () {
              */
             $(this._pointerHandlerContainer).on('mousemove', (event) => {
 
-                this._lastPoinerDevice = LAST_MOUSE;
+                this.lastPointerDevice = LAST_MOUSE;
 
                 this._mouseX = event.pageX;
                 this._mouseY = event.pageY;
@@ -432,7 +431,7 @@ export const FramePointer = (function () {
              */
             this._pointerHandlerContainer.addEventListener("touchstart", (event) => {
 
-                this._lastPoinerDevice = LAST_TOUCH;
+                this.lastPointerDevice = LAST_TOUCH;
 
                 this._touchIsActive = true;
                 this.pointerIsActive = true;
@@ -485,7 +484,7 @@ export const FramePointer = (function () {
              */
             this._pointerHandlerContainer.addEventListener("touchend", (event) => {
 
-                this._lastPoinerDevice = LAST_TOUCH;
+                this.lastPointerDevice = LAST_TOUCH;
 
                 this._touchIsActive = false;
                 this.pointerIsActive = false;
@@ -534,7 +533,7 @@ export const FramePointer = (function () {
              */
             this._pointerHandlerContainer.addEventListener("touchmove", (event) => {
 
-                this._lastPoinerDevice = LAST_TOUCH;
+                this.lastPointerDevice = LAST_TOUCH;
 
                 this._touchX = event.targetTouches[0].clientX;
                 this._touchY = event.targetTouches[0].clientY;
@@ -613,7 +612,7 @@ export const FramePointer = (function () {
          * @returns {boolean}
          */
         isPointerMouse() {
-            return this._lastPoinerDevice === LAST_MOUSE;
+            return this.lastPointerDevice === LAST_MOUSE;
         }
 
         /**
@@ -621,7 +620,7 @@ export const FramePointer = (function () {
          * @returns {boolean}
          */
         isPointerTouch() {
-            return this._lastPoinerDevice === LAST_TOUCH;
+            return this.lastPointerDevice === LAST_TOUCH;
         }
 
         /**

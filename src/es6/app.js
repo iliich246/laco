@@ -1,23 +1,23 @@
-import { FrameInterface } from "./classes/FrameInterface";
-import { LandingFrame } from "./classes/LandingFrame";
+import { LandingBuilderBase } from "./classes/LandingBuilderBase";
 
-console.log('sasat');
+import {Frame1} from "./test/Frame1";
+import {Frame2} from "./test/Frame2";
+import {Frame3} from "./test/Frame3";
 
-let x = new FrameInterface();
-
-console.log(x);
-
-class NCL extends LandingFrame {
-    constructor(a, b) {
-        super(a, b);
-
-        console.log('NCL constructor');
-
-
-
+class LandingBuilder extends LandingBuilderBase {
+    constructor() {
+        super();
     }
 }
 
-let z = new NCL(1,2);
+$(() => {
+    let landingBuilder = new LandingBuilder();
 
-console.log(z);
+    let frame1 = new Frame1('', landingBuilder);
+    let frame2 = new Frame2('', landingBuilder);
+    let frame3 = new Frame3('', landingBuilder);
+
+    // landingBuilder.add(frame1);
+    // landingBuilder.add(frame2);
+    // landingBuilder.add(frame3);
+});
