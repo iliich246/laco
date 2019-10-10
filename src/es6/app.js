@@ -11,11 +11,76 @@ class LandingBuilder extends LandingBuilderBase {
 }
 
 $(() => {
-    let landingBuilder = new LandingBuilder();
+    let landingBuilder = new LandingBuilder({
+        //configuration
+    });
 
-    let frame1 = new Frame1('', landingBuilder);
-    let frame2 = new Frame2('', landingBuilder);
-    let frame3 = new Frame3('', landingBuilder);
+    let frame1 = new Frame1(document.getElementById('frame1'), landingBuilder);
+    let frame2 = new Frame2(document.getElementById('frame2'), landingBuilder);
+    let frame3 = new Frame3(document.getElementById('frame3'), landingBuilder);
+
+    landingBuilder.setActiveFrame(frame1);
+
+    landingBuilder.initialization();
+
+    frame1.onResizeOnMobile(() => {
+        console.log('Mobile rez');
+    });
+
+    frame1.onResizeOnMobile(() => {
+        console.log('onResizeOnMobile rez');
+    });
+
+    frame1.onResizeOnDesktop(() => {
+        console.log('onResizeOnDesktop rez');
+    });
+    frame1.onResizeOnBootstrapXl(() => {
+        console.log('onResizeOnBootstrapXl rez');
+    });
+    frame1.onResizeOnBootstrapLg(() => {
+        console.log('onResizeOnBootstrapLg rez');
+    });
+    frame1.onResizeOnBootstrapMd(() => {
+        console.log('onResizeOnBootstrapMd rez');
+    });
+    frame1.onResizeOnBootstrapSm(() => {
+        console.log('onResizeOnBootstrapSm rez');
+    });
+    frame1.onResizeOnBootstrapEsm(() => {
+        console.log('onResizeOnBootstrapEsm rez');
+    }, true);
+
+    // landingBuilder.onResizeOnMobile(() => {
+    //     console.log('Mobile rez');
+    // });
+    //
+    // landingBuilder.onResizeOnMobile(() => {
+    //     console.log('onResizeOnMobile rez');
+    // });
+    //
+    // landingBuilder.onResizeOnDesktop(() => {
+    //     console.log('onResizeOnDesktop rez');
+    // });
+    // landingBuilder.onResizeOnBootstrapXl(() => {
+    //     console.log('onResizeOnBootstrapXl rez');
+    // });
+    // landingBuilder.onResizeOnBootstrapLg(() => {
+    //     console.log('onResizeOnBootstrapLg rez');
+    // });
+    // landingBuilder.onResizeOnBootstrapMd(() => {
+    //     console.log('onResizeOnBootstrapMd rez');
+    // });
+    // landingBuilder.onResizeOnBootstrapSm(() => {
+    //     console.log('onResizeOnBootstrapSm rez');
+    // });
+    // landingBuilder.onResizeOnBootstrapEsm(() => {
+    //     console.log('onResizeOnBootstrapEsm rez');
+    // });
+
+
+    console.log(frame1);
+
+    frame1.initialization();
 
     // landingBuilder.add(frame1);
     // landingBuilder.add(frame2);

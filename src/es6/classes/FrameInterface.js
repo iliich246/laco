@@ -6,27 +6,13 @@
  *
  * @type {FrameInterface}
  */
+import {LandingBuilderBase} from "./LandingBuilderBase";
+
 export const FrameInterface = (function () {
     const STATE_OFF   = 0;
     const STATE_BEGIN = 1;
     const STATE_WAIT  = 2;
     const STATE_STOP  = 3;
-
-    const MAX_MOBILE_RESOLUTION = 768;
-
-    const CURRENT_DESKTOP = 0;
-    const CURRENT_MOBILE  = 1;
-
-    const CURRENT_BOOTSTRAP_XL  = 0;
-    const CURRENT_BOOTSTRAP_LG  = 1;
-    const CURRENT_BOOTSTRAP_MD  = 2;
-    const CURRENT_BOOTSTRAP_SM  = 3;
-    const CURRENT_BOOTSTRAP_ESM = 4;
-
-    const BOOTSTRAP_XL = 1200;
-    const BOOTSTRAP_LG = 992;
-    const BOOTSTRAP_MD = 768;
-    const BOOTSTRAP_SM = 576;
 
     /**
      * Class FrameInterface
@@ -34,8 +20,15 @@ export const FrameInterface = (function () {
     class FrameInterface {
         /**
          * Constructor
+         * @param {LandingBuilderBase} landingBuilder
          */
-        constructor() {
+        constructor(landingBuilder) {
+            /**
+             * Instance of current LandingBuilder object
+             * @type {LandingBuilderBase}
+             * @private
+             */
+            this._landingBuilder = landingBuilder;
             /**
              * Keeps state of frame interface object
              * @type {number}
@@ -47,12 +40,19 @@ export const FrameInterface = (function () {
              * @type {FrameInterface[]}
              */
             this._frameComponents = [];
+            /**
+             * Variable consist state of initialization
+             * @type {boolean}
+             * @private
+             */
+            this._isInitialized = false;
 
             /**
              * FrameInterface actions callbacks arrays
              * @type {Array}
              * @private
              */
+            this._awakeCallbacks      = [];
             this._startBeginCallbacks = [];
             this._startEndCallbacks   = [];
             this._stopBeginCallbacks  = [];
@@ -67,11 +67,8 @@ export const FrameInterface = (function () {
              * @type {Array}
              * @private
              */
-            this._resizeCallbacks                 = [];
-            this._beforeInitializationCallbacks   = [];
-            this._afterInitializationCallbacks    = [];
-            this._beforeLoadCallbacks             = [];
-            this._afterLoadCallbacks              = [];
+            this._onResizeCallbacks               = [];
+            this._onPrepareResizeCallbacks        = [];
             this._onResizeOnDesktopCallbacks      = [];
             this._onResizeOnMobileCallbacks       = [];
             this._onResizeOnBootstrapXlCallbacks  = [];
@@ -79,6 +76,11 @@ export const FrameInterface = (function () {
             this._onResizeOnBootstrapMdCallbacks  = [];
             this._onResizeOnBootstrapSmCallbacks  = [];
             this._onResizeOnBootstrapEsmCallbacks = [];
+
+            this._beforeInitializationCallbacks   = [];
+            this._afterInitializationCallbacks    = [];
+            this._beforeLoadCallbacks             = [];
+            this._afterLoadCallbacks              = [];
 
             /**
              * FrameInterface callbacks arrays for use in switch frames mechanism
@@ -106,20 +108,14 @@ export const FrameInterface = (function () {
              * @private
              */
             this._waitRepeat = true;
-            /**
-             * Keeps state of previous display size
-             * Needed for correct trigger onSwitchOnMobile and onSwitchOnDesktop events
-             * @type {number}
-             * @private
-             */
-            this._currentDisplayState = 0;
-            /**
-             * Keeps state of previous bootstrap display size
-             * Needed for correct trigger bootstrap resize events
-             * @type {number}
-             * @private
-             */
-            this._currentBootstrapDisplayState = 0;
+        }
+
+        /**
+         * Return LandingBuilderBase object that aggregate this FrameInterface object
+         * @returns {LandingBuilderBase}
+         */
+        getLandingBuilder() {
+            return this._landingBuilder;
         }
 
         /**
@@ -211,7 +207,7 @@ export const FrameInterface = (function () {
          * @param callback
          * @param isOnce
          */
-        onAfterInitialization(callback, isOnce = false) {
+        onInitializationComplete(callback, isOnce = false) {
             this._afterInitializationCallbacks.push([
                 callback,
                 isOnce
@@ -221,8 +217,13 @@ export const FrameInterface = (function () {
         /**
          * This method must be used for initialization in inherited class
          * as super.initialization() for trigger events
+         * @param {boolean} triggerComponents
          */
-        initialization() {
+        initialization(triggerComponents = true) {
+            if (this._isInitialized) return false;
+
+            this._isInitialized = true;
+
             for (let i = 0; i < this._beforeInitializationCallbacks.length; i++) {
                 let currentCallback = this._beforeInitializationCallbacks[i][0];
 
@@ -234,14 +235,15 @@ export const FrameInterface = (function () {
                     this._beforeInitializationCallbacks.splice(i--, 1);
             }
 
-            if (FrameInterface.isDesktop()) this._currentDisplayState = CURRENT_DESKTOP;
-            if (FrameInterface.isMobile())  this._currentDisplayState = CURRENT_MOBILE;
+            if (!triggerComponents) return true;
 
-            if (FrameInterface.isBootstrapXl()) return this._currentBootstrapDisplayState  = CURRENT_BOOTSTRAP_XL;
-            if (FrameInterface.isBootstrapLg()) return this._currentBootstrapDisplayState  = CURRENT_BOOTSTRAP_LG;
-            if (FrameInterface.isBootstrapMd()) return this._currentBootstrapDisplayState  = CURRENT_BOOTSTRAP_MD;
-            if (FrameInterface.isBootstrapSm()) return this._currentBootstrapDisplayState  = CURRENT_BOOTSTRAP_SM;
-            if (FrameInterface.isBootstrapEsm()) return this._currentBootstrapDisplayState = CURRENT_BOOTSTRAP_ESM;
+            for (let i = 0; i < this._frameComponents.length; i++) {
+                let currentComponent = this._frameComponents[i];
+
+                currentComponent.initialization();
+            }
+
+            return true;
         }
 
         /**
@@ -259,6 +261,14 @@ export const FrameInterface = (function () {
                 if (this._afterInitializationCallbacks[i][1])
                     this._afterInitializationCallbacks.splice(i--, 1);
             }
+        }
+
+        /**
+         * Return true if FrameInstance object initialized
+         * @returns {boolean}
+         */
+        isInitialized() {
+            return this._isInitialized;
         }
 
         /**
@@ -324,127 +334,15 @@ export const FrameInterface = (function () {
          * for trigger events
          */
         resize() {
-            for (let i = 0; i < this._resizeCallbacks.length; i++) {
-                let currentCallback = this._resizeCallbacks[i][0];
+            for (let i = 0; i < this._onResizeCallbacks.length; i++) {
+                let currentCallback = this._onResizeCallbacks[i][0];
 
                 currentCallback(this);
             }
 
-            for (let i = 0; i < this._resizeCallbacks.length; i++) {
-                if (this._resizeCallbacks[i][1])
-                    this._resizeCallbacks.splice(i--, 1);
-            }
-
-            //check to desktop size
-            if (FrameInterface.isDesktop() && this._currentDisplayState !== CURRENT_DESKTOP) {
-                this._currentDisplayState = CURRENT_DESKTOP;
-
-                for (let i = 0; i < this._onResizeOnDesktopCallbacks.length; i++) {
-                    let currentCallback = this._onResizeOnDesktopCallbacks[i][0];
-
-                    currentCallback(this);
-                }
-
-                for (let i = 0; i < this._onResizeOnDesktopCallbacks.length; i++) {
-                    if (this._onResizeOnDesktopCallbacks[i][1])
-                        this._onResizeOnDesktopCallbacks.splice(i--, 1);
-                }
-            }
-
-            //check to mobile size
-            if (FrameInterface.isMobile() && this._currentDisplayState !== CURRENT_MOBILE) {
-                this._currentDisplayState = CURRENT_MOBILE;
-
-                for (let i = 0; i < this._onResizeOnMobileCallbacks.length; i++) {
-                    let currentCallback = this._onResizeOnMobileCallbacks[i][0];
-
-                    currentCallback(this);
-                }
-
-                for (let i = 0; i < this._onResizeOnMobileCallbacks.length; i++) {
-                    if (this._onResizeOnMobileCallbacks[i][1])
-                        this._onResizeOnMobileCallbacks.splice(i--, 1);
-                }
-            }
-
-            //check resize to bootstrap xl
-            if (FrameInterface.isBootstrapXl() && this._currentBootstrapDisplayState !== CURRENT_BOOTSTRAP_XL) {
-                this._currentBootstrapDisplayState = CURRENT_BOOTSTRAP_XL;
-
-                for (let i = 0; i < this._onResizeOnBootstrapXlCallbacks.length; i++) {
-                    let currentCallback = this._onResizeOnBootstrapXlCallbacks[i][0];
-
-                    currentCallback(this);
-                }
-
-                for (let i = 0; i < this._onResizeOnBootstrapXlCallbacks.length; i++) {
-                    if (this._onResizeOnBootstrapXlCallbacks[i][1])
-                        this._onResizeOnBootstrapXlCallbacks.splice(i--, 1);
-                }
-            }
-
-            //check resize to bootstrap lg
-            if (FrameInterface.isBootstrapLg() && this._currentBootstrapDisplayState !== CURRENT_BOOTSTRAP_LG) {
-                this._currentBootstrapDisplayState = CURRENT_BOOTSTRAP_LG;
-
-                for (let i = 0; i < this._onResizeOnBootstrapLgCallbacks.length; i++) {
-                    let currentCallback = this._onResizeOnBootstrapLgCallbacks[i][0];
-
-                    currentCallback(this);
-                }
-
-                for (let i = 0; i < this._onResizeOnBootstrapLgCallbacks.length; i++) {
-                    if (this._onResizeOnBootstrapLgCallbacks[i][1])
-                        this._onResizeOnBootstrapLgCallbacks.splice(i--, 1);
-                }
-            }
-
-            //check resize to bootstrap md
-            if (FrameInterface.isBootstrapMd() && this._currentBootstrapDisplayState !== CURRENT_BOOTSTRAP_MD) {
-                this._currentBootstrapDisplayState = CURRENT_BOOTSTRAP_MD;
-
-                for (let i = 0; i < this._onResizeOnBootstrapMdCallbacks.length; i++) {
-                    let currentCallback = this._onResizeOnBootstrapMdCallbacks[i][0];
-
-                    currentCallback(this);
-                }
-
-                for (let i = 0; i < this._onResizeOnBootstrapMdCallbacks.length; i++) {
-                    if (this._onResizeOnBootstrapMdCallbacks[i][1])
-                        this._onResizeOnBootstrapMdCallbacks.splice(i--, 1);
-                }
-            }
-
-            //check resize to bootstrap sm
-            if (FrameInterface.isBootstrapSm() && this._currentBootstrapDisplayState !== CURRENT_BOOTSTRAP_SM) {
-                this._currentBootstrapDisplayState = CURRENT_BOOTSTRAP_SM;
-
-                for (let i = 0; i < this._onResizeOnBootstrapSmCallbacks.length; i++) {
-                    let currentCallback = this._onResizeOnBootstrapSmCallbacks[i][0];
-
-                    currentCallback(this);
-                }
-
-                for (let i = 0; i < this._onResizeOnBootstrapSmCallbacks.length; i++) {
-                    if (this._onResizeOnBootstrapSmCallbacks[i][1])
-                        this._onResizeOnBootstrapSmCallbacks.splice(i--, 1);
-                }
-            }
-
-            //check resize to bootstrap esm
-            if (FrameInterface.isBootstrapEsm() && this._currentBootstrapDisplayState !== CURRENT_BOOTSTRAP_ESM) {
-                this._currentBootstrapDisplayState = CURRENT_BOOTSTRAP_ESM;
-
-                for (let i = 0; i < this._onResizeOnBootstrapEsmCallbacks.length; i++) {
-                    let currentCallback = this._onResizeOnBootstrapEsmCallbacks[i][0];
-
-                    currentCallback(this);
-                }
-
-                for (let i = 0; i < this._onResizeOnBootstrapEsmCallbacks.length; i++) {
-                    if (this._onResizeOnBootstrapEsmCallbacks[i][1])
-                        this._onResizeOnBootstrapEsmCallbacks.splice(i--, 1);
-                }
+            for (let i = 0; i < this._onResizeCallbacks.length; i++) {
+                if (this._onResizeCallbacks[i][1])
+                    this._onResizeCallbacks.splice(i--, 1);
             }
         }
 
@@ -453,20 +351,154 @@ export const FrameInterface = (function () {
          * He makes prepare operations before screen resize
          */
         prepareResize() {
+            for (let i = 0; i < this._onPrepareResizeCallbacks.length; i++) {
+                let currentCallback = this._onPrepareResizeCallbacks[i][0];
 
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onPrepareResizeCallbacks.length; i++) {
+                if (this._onPrepareResizeCallbacks[i][1])
+                    this._onPrepareResizeCallbacks.splice(i--, 1);
+            }
         }
 
         /**
-         * Hang callback on resize event of this frame
+         * Hang callback on resize event of this FrameInterface object
          * @param callback
          * @param isOnce
          */
         onResize(callback, isOnce = false) {
-            this._resizeCallbacks.push([
+            this._onResizeCallbacks.push([
                 callback,
                 isOnce
             ]);
         }
+
+        /**
+         * Hand callback on prepare resize event of this FrameInterface object
+         * @param callback
+         * @param isOnce
+         */
+        omPrepareResize(callback, isOnce = false) {
+            this._onPrepareResizeCallbacks.push([
+                callback,
+                isOnce
+            ]);
+        }
+
+        /**
+         * This method strike resize desktop callbacks
+         */
+        _strikeOnResizeDesktop() {
+            for (let i = 0; i < this._onResizeOnDesktopCallbacks.length; i++) {
+                let currentCallback = this._onResizeOnDesktopCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeOnDesktopCallbacks.length; i++) {
+                if (this._onResizeOnDesktopCallbacks[i][1])
+                    this._onResizeOnDesktopCallbacks.splice(i--, 1);
+            }
+        }
+
+        /**
+         * This method strike resize mobile callbacks
+         */
+        _strikeOnResizeMobile() {
+            for (let i = 0; i < this._onResizeOnMobileCallbacks.length; i++) {
+                let currentCallback = this._onResizeOnMobileCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeOnMobileCallbacks.length; i++) {
+                if (this._onResizeOnMobileCallbacks[i][1])
+                    this._onResizeOnMobileCallbacks.splice(i--, 1);
+            }
+        }
+
+        /**
+         * This method strike resize bootstrap Xl callbacks
+         */
+        _strikeOnResizeBootstrapXl() {
+            for (let i = 0; i < this._onResizeOnBootstrapXlCallbacks.length; i++) {
+                let currentCallback = this._onResizeOnBootstrapXlCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeOnBootstrapXlCallbacks.length; i++) {
+                if (this._onResizeOnBootstrapXlCallbacks[i][1])
+                    this._onResizeOnBootstrapXlCallbacks.splice(i--, 1);
+            }
+        }
+
+        /**
+         * This method strike resize bootstrap Lg callbacks
+         */
+        _strikeOnResizeBootstrapLg() {
+            for (let i = 0; i < this._onResizeOnBootstrapLgCallbacks.length; i++) {
+                let currentCallback = this._onResizeOnBootstrapLgCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeOnBootstrapLgCallbacks.length; i++) {
+                if (this._onResizeOnBootstrapLgCallbacks[i][1])
+                    this._onResizeOnBootstrapLgCallbacks.splice(i--, 1);
+            }
+        }
+
+        /**
+         * This method strike resize bootstrap Md callbacks
+         */
+        _strikeOnResizeBootstrapMd() {
+            for (let i = 0; i < this._onResizeOnBootstrapMdCallbacks.length; i++) {
+                let currentCallback = this._onResizeOnBootstrapMdCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeOnBootstrapMdCallbacks.length; i++) {
+                if (this._onResizeOnBootstrapMdCallbacks[i][1])
+                    this._onResizeOnBootstrapMdCallbacks.splice(i--, 1);
+            }
+        }
+
+        /**
+         * This method strike resize bootstrap Sm callbacks
+         */
+        _strikeOnResizeBootstrapSm() {
+            for (let i = 0; i < this._onResizeOnBootstrapSmCallbacks.length; i++) {
+                let currentCallback = this._onResizeOnBootstrapSmCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeOnBootstrapSmCallbacks.length; i++) {
+                if (this._onResizeOnBootstrapSmCallbacks[i][1])
+                    this._onResizeOnBootstrapSmCallbacks.splice(i--, 1);
+            }
+        }
+
+        /**
+         * This method strike resize bootstrap Esm callbacks
+         */
+        _strikeOnResizeBootstrapEsm() {
+            for (let i = 0; i < this._onResizeOnBootstrapEsmCallbacks.length; i++) {
+                let currentCallback = this._onResizeOnBootstrapEsmCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeOnBootstrapEsmCallbacks.length; i++) {
+                if (this._onResizeOnBootstrapEsmCallbacks[i][1])
+                    this._onResizeOnBootstrapEsmCallbacks.splice(i--, 1);
+            }
+        }
+
 
         /**
          * Hang callback on resize event of this frame
@@ -1085,59 +1117,51 @@ export const FrameInterface = (function () {
         }
 
         /**
-         * Return true if desktop resolution
+         * Proxy LandingBuilderBase method isDesktop()
          * @returns {boolean}
          */
-        static isDesktop() {
-            return window.innerWidth > MAX_MOBILE_RESOLUTION;
+        isDesktop() {
+            return this.getLandingBuilder().isDesktop();
         }
 
         /**
-         * Return true if mobile resolution
+         * Proxy LandingBuilderBase method isMobile()
          * @returns {boolean}
          */
-        static isMobile() {
-            return window.innerWidth <= MAX_MOBILE_RESOLUTION;
+        isMobile() {
+            return this.getLandingBuilder().isMobile();
         }
 
         /**
-         * Return true if bootstrap xl resolution
+         * Proxy LandingBuilderBase method isBootstrapXl()
          * @returns {boolean}
          */
-        static isBootstrapXl() {
-            return window.innerWidth >= BOOTSTRAP_XL;
+        isBootstrapXl() {
+            return this.getLandingBuilder().isBootstrapXl();
         }
 
         /**
-         * Return true if bootstrap lg resolution
+         * Proxy LandingBuilderBase method isBootstrapLg()
          * @returns {boolean}
          */
-        static isBootstrapLg() {
-            return window.innerWidth < BOOTSTRAP_XL && window.innerWidth >= BOOTSTRAP_LG;
+        isBootstrapLg() {
+            return this.getLandingBuilder().isBootstrapLg();
         }
 
         /**
-         * Return true if bootstrap md resolution
+         * Proxy LandingBuilderBase method isBootstrapMd()
          * @returns {boolean}
          */
-        static isBootstrapMd() {
-            return window.innerWidth < BOOTSTRAP_LG && window.innerWidth >= BOOTSTRAP_MD;
+        isBootstrapMd() {
+            return this.getLandingBuilder().isBootstrapMd();
         }
 
         /**
-         * Return true if bootstrap sm resolution
+         * Proxy LandingBuilderBase method isBootstrapEsm()
          * @returns {boolean}
          */
-        static isBootstrapSm() {
-            return window.innerWidth < BOOTSTRAP_MD && window.innerWidth >= BOOTSTRAP_SM;
-        }
-
-        /**
-         * Return true if bootstrap esm resolution
-         * @returns {boolean}
-         */
-        static isBootstrapEsm() {
-            return window.innerWidth < BOOTSTRAP_SM;
+        isBootstrapEsm() {
+            return this.getLandingBuilder().isBootstrapEsm();
         }
     }
 
