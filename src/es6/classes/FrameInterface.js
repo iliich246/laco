@@ -218,6 +218,7 @@ export const FrameInterface = (function () {
          * This method must be used for initialization in inherited class
          * as super.initialization() for trigger events
          * @param {boolean} triggerComponents
+         * @return {boolean}
          */
         initialization(triggerComponents = true) {
             if (this._isInitialized) return false;
@@ -595,7 +596,7 @@ export const FrameInterface = (function () {
          * This method add to frame frame component
          * @param {FrameInterface} frameComponent
          */
-        addFrameComponent(frameComponent) {
+        addComponent(frameComponent) {
             this._frameComponents.push(frameComponent);
         }
 
@@ -604,23 +605,8 @@ export const FrameInterface = (function () {
          * But not destroy frame component
          * @param {string} name
          */
-        removeFrameComponent(name) {
+        removeComponent(name) {
             //TODO: make this method
-        }
-
-        /**
-         * This method must be used in inherited class as super.animationFrame()
-         * and putted in animation frames loop
-         * @param {boolean} triggerComponents
-         */
-        animationFrame(triggerComponents = true) {
-            if (!triggerComponents) return;
-
-            for (let i = 0; i < this._frameComponents.length; i++) {
-                let currentComponent = this._frameComponents[i];
-
-                currentComponent.animationFrame();
-            }
         }
 
         /**
@@ -628,14 +614,15 @@ export const FrameInterface = (function () {
          * and after that you must put there initial state of begin state
          * all added frame components also will trigger they startBeginConditions() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
-        startBeginConditions(triggerComponents = true) {
+        startConditions(triggerComponents = true) {
             if (!triggerComponents) return;
 
             for (let i = 0; i < this._frameComponents.length; i++) {
                 let currentComponent = this._frameComponents[i];
 
-                currentComponent.startBeginConditions();
+                currentComponent.startConditions();
             }
         }
 
@@ -644,6 +631,7 @@ export const FrameInterface = (function () {
          * and after that you must put there animation of start state
          * all added frame components also will trigger they startSequence() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         startSequence(triggerComponents = true) {
             this._state = STATE_BEGIN;
@@ -673,6 +661,7 @@ export const FrameInterface = (function () {
          * and after that you must put start state end without animation
          * all added frame components also will trigger they startImmediately() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         startImmediately(triggerComponents = true) {
             this._state = STATE_BEGIN;
@@ -702,8 +691,9 @@ export const FrameInterface = (function () {
          * He trigger startEndCallbacks for this frame
          * all added frame components also will trigger they startSequenceComplete() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
-        startSequenceComplete(triggerComponents = true) {
+        startComplete(triggerComponents = true) {
             this._state = STATE_WAIT;
 
             for (let i = 0; i < this._startEndCallbacks.length; i++) {
@@ -724,6 +714,8 @@ export const FrameInterface = (function () {
 
                 currentComponent.startSequenceComplete();
             }
+
+
         }
 
         /**
@@ -755,6 +747,7 @@ export const FrameInterface = (function () {
          * and after that you must put there animation of stop state
          * all added frame components also will trigger they stopSequence() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         stopSequence(triggerComponents = true) {
             this._state = STATE_STOP;
@@ -784,6 +777,7 @@ export const FrameInterface = (function () {
          * He trigger stopEndCallbacks for this frame
          * all added frame components also will trigger they stopSequenceCompleted() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         stopSequenceCompleted(triggerComponents = true) {
             this._state = STATE_OFF;
@@ -813,6 +807,7 @@ export const FrameInterface = (function () {
          * and after that you must put stop state end without animation
          * all added frame components also will trigger they stopImmediately() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         stopImmediately(triggerComponents = true) {
             this._state = STATE_OFF;
@@ -834,22 +829,6 @@ export const FrameInterface = (function () {
                 let currentComponent = this._frameComponents[i];
 
                 currentComponent.stopImmediately();
-            }
-        }
-
-        /**
-         * This method must be used in inherited class as super.stopEndConditions()
-         * and after that you must put there end state of stop state
-         * all added frame components also will trigger they stopEndConditions() methods
-         * @param {boolean} triggerComponents
-         */
-        stopEndConditions(triggerComponents = true) {
-            if (!triggerComponents) return;
-
-            for (let i = 0; i < this._frameComponents.length; i++) {
-                let currentComponent = this._frameComponents[i];
-
-                currentComponent.stopEndConditions();
             }
         }
 
@@ -1031,6 +1010,7 @@ export const FrameInterface = (function () {
          * He trigger offCallbacks for this frame interface object
          * all added frame components also will trigger they offSequence() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         offSequence(triggerComponents = true) {
             this._state = STATE_OFF;
@@ -1065,6 +1045,21 @@ export const FrameInterface = (function () {
                 callback,
                 isOnce
             ]);
+        }
+
+        /**
+         * This method must be used in inherited class as super.animationFrame()
+         * and putted in animation frames loop
+         * @param {boolean} triggerComponents
+         */
+        animationFrame(triggerComponents = true) {
+            if (!triggerComponents) return;
+
+            for (let i = 0; i < this._frameComponents.length; i++) {
+                let currentComponent = this._frameComponents[i];
+
+                currentComponent.animationFrame();
+            }
         }
 
         /**

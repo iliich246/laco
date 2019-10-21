@@ -50,6 +50,8 @@ $(() => {
         console.log('onResizeOnBootstrapEsm rez');
     }, true);
 
+    //frame1.startSequence();
+
     // landingBuilder.onResizeOnMobile(() => {
     //     console.log('Mobile rez');
     // });
@@ -78,10 +80,12 @@ $(() => {
     // });
 
 
-    console.log(frame1);
+    //console.log(frame1);
 
     frame1.initialization();
-
+    frame1.startSequence();
+    frame1.stopSequence();
+    frame1.offSequence();
     // landingBuilder.add(frame1);
     // landingBuilder.add(frame2);
     // landingBuilder.add(frame3);

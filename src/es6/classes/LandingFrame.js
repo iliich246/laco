@@ -34,12 +34,11 @@ export const LandingFrame = (function () {
          * @param {LandingBuilder} landingBuilder
          */
         constructor(frameContainer, landingBuilder) {
-            super();
+            super(landingBuilder);
 
-            this._landingBuilder = landingBuilder;
             this._frameContainer = frameContainer;
 
-            this._switchEffectName = $(this._frameContainer).data('switchClass');
+            //this._switchEffectName = $(this._frameContainer).data('switchClass');
 
             //hammer callbacks
             this._swipeLeftCallbacks  = [];
@@ -74,9 +73,11 @@ export const LandingFrame = (function () {
         /**
          * This method must be used for initialization in inherited class
          * as super.initialization() for trigger events
+         * @param {boolean} triggerComponents
+         * @return {boolean}
          */
-        initialization() {
-            super.initialization();
+        initialization(triggerComponents = true) {
+            if (!super.initialization(triggerComponents)) return false;
 
             this._pointer = new FramePointer(this, this._frameContainer);
 
@@ -230,6 +231,8 @@ export const LandingFrame = (function () {
                     }
                 }
             });
+
+            return true;
         }
 
         /**
