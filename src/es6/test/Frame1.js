@@ -32,6 +32,17 @@ export class Frame1 extends LandingFrame {
 
         console.log('Frame1 init');
 
+        let that = this;
+
+        function _animation() {
+            requestAnimationFrame(_animation);
+            that.animationFrame();
+        }
+
+        _animation();
+
+
+
         super.initializationComplete();
 
         return true;
@@ -58,8 +69,6 @@ export class Frame1 extends LandingFrame {
     offSequence(triggerComponents = true) {
         super.offSequence();
     }
-
-
 }
 
 /**
@@ -118,6 +127,12 @@ class Frame1Component1 extends  LandingFrameComponent {
         super.offSequence();
 
         console.log('Frame1 Component1 offSequence');
+    }
+
+    animationFrame(triggerComponents = true) {
+        super.animationFrame(triggerComponents);
+
+        console.log('anim1');
     }
 }
 

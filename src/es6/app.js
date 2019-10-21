@@ -86,6 +86,7 @@ $(() => {
     frame1.startSequence();
     frame1.stopSequence();
     frame1.offSequence();
+    //frame1.animationFrame();
     // landingBuilder.add(frame1);
     // landingBuilder.add(frame2);
     // landingBuilder.add(frame3);

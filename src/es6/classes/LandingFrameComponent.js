@@ -2,20 +2,33 @@ import { FrameInterface } from "./FrameInterface";
 import { FramePointer } from "./FramePointer";
 
 /**
+ * Class LandingFrameComponent
  *
- * @type {LandingFrame}
+ * @type {LandingFrameComponent}
  */
 export const LandingFrameComponent = (function () {
+    const HOVER_MODE_INTERNAL = 0;
+    const HOVER_MODE_EXTERNAL = 1;
+
+    /**
+     * Class LandingFrameComponent
+     */
     class LandingFrameComponent extends FrameInterface {
         /**
          *
          * @param {LandingFrame} landingFrame
          */
         constructor(landingFrame) {
-            super();
+            super(landingFrame.getLandingBuilder());
+            /**
+             *
+             * @type {LandingFrame}
+             * @private
+             */
+            this._landingFrame = landingFrame;
+            this._localPointer = new FramePointer();
 
-            this.landingFrame = landingFrame;
-            this.localPointer = new FramePointer();
+            this._hoverMode = HOVER_MODE_EXTERNAL;
 
             //local pointer callbacks
             this._mouseMoveCallbacks = [];
@@ -76,10 +89,10 @@ export const LandingFrameComponent = (function () {
 
         /**
          * Return LandingBuilder of parent frame
-         * @returns {LandingBuilder}
+         * @returns {LandingBuilderBase}
          */
         getLandingBuilder() {
-            return this.landingFrame.getLandingBuilder();
+            return this._landingFrame.getLandingBuilder();
         }
 
         /**
@@ -88,7 +101,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onClick(callback, isOnce = false) {
-            this.landingFrame.onClick((pointer) => {
+            this._landingFrame.onClick((pointer) => {
                 if ((pointer.x > this.getAbsCoordX() && pointer.x < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer.y > this.getAbsCoordY() && pointer.y < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -105,7 +118,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onMouseMove(callback, isOnce = false) {
-            this.landingFrame.onMouseMove((pointer) => {
+            this._landingFrame.onMouseMove((pointer) => {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -122,7 +135,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onActiveMouseMove(callback, isOnce = false) {
-            this.landingFrame.onActiveMouseMove((pointer) => {
+            this._landingFrame.onActiveMouseMove((pointer) => {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -139,7 +152,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onMouseDown(callback, isOnce = false) {
-            this.landingFrame.onMouseDown((pointer) => {
+            this._landingFrame.onMouseDown((pointer) => {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -155,7 +168,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onMouseUp(callback, isOnce = false) {
-            this.landingFrame.onMouseDown((pointer) => {
+            this._landingFrame.onMouseDown((pointer) => {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -171,7 +184,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onTouchMove(callback, isOnce = false) {
-            this.landingFrame.onTouchMove((pointer) => {
+            this._landingFrame.onTouchMove((pointer) => {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -187,7 +200,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onTouchDown(callback, isOnce = false) {
-            this.landingFrame.onTouchDown((pointer) => {
+            this._landingFrame.onTouchDown((pointer) => {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -203,7 +216,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onTouchUp(callback, isOnce = false) {
-            this.landingFrame.onTouchUp((pointer) => {
+            this._landingFrame.onTouchUp((pointer) => {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -220,7 +233,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onPointerMove(callback, isOnce = false) {
-            this.landingFrame.onPointerMove((pointer) => {
+            this._landingFrame.onPointerMove((pointer) => {
                 if ((pointer.x > this.getAbsCoordX() && pointer.x < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer.y > this.getAbsCoordY() && pointer.y < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -238,7 +251,7 @@ export const LandingFrameComponent = (function () {
          * @param isOnce
          */
         onActivePointerMove(callback, isOnce = false) {
-            this.landingFrame.onActivePointerMove((pointer) => {
+            this._landingFrame.onActivePointerMove((pointer) => {
                 if ((pointer.x > this.getAbsCoordX() && pointer.x < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer.y > this.getAbsCoordY() && pointer.y < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
@@ -302,7 +315,6 @@ export const LandingFrameComponent = (function () {
 
         /**
          * @inheritDoc
-         * @param triggerComponents
          */
         animationFrame(triggerComponents) {
             super.animationFrame(triggerComponents);

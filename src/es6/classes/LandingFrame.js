@@ -248,15 +248,7 @@ export const LandingFrame = (function () {
          * @returns {FramePointer}
          */
         getGlobalPointer() {
-            return this._landingBuilder.getGlobalPointer();
-        }
-
-        /**
-         * Return aggregator LandingBuilder
-         * @returns {LandingBuilder}
-         */
-        getLandingBuilder() {
-            return this._landingBuilder;
+            return this.getLandingBuilder().getGlobalPointer();
         }
 
         /**

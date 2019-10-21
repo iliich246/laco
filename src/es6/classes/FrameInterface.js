@@ -194,6 +194,7 @@ export const FrameInterface = (function () {
          * Hang callback on before initialization event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onBeforeInitialization(callback, isOnce = false) {
             this._beforeInitializationCallbacks.push([
@@ -206,6 +207,7 @@ export const FrameInterface = (function () {
          * Hang callback on after initialization event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onInitializationComplete(callback, isOnce = false) {
             this._afterInitializationCallbacks.push([
@@ -250,6 +252,7 @@ export const FrameInterface = (function () {
         /**
          * This method must be called in inherited class after complete initialization
          * of concrete frame as super.initializationComplete()
+         * @return void
          */
         initializationComplete() {
             for (let i = 0; i < this._afterInitializationCallbacks.length; i++) {
@@ -276,6 +279,7 @@ export const FrameInterface = (function () {
          * Hang callback on before load event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onBeforeLoad(callback, isOnce = false) {
             this._beforeLoadCallbacks.push([
@@ -288,6 +292,7 @@ export const FrameInterface = (function () {
          * Hang callback on after load event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onAfterLoad(callback, isOnce = false) {
             this._afterLoadCallbacks.push([
@@ -299,6 +304,7 @@ export const FrameInterface = (function () {
         /**
          * This method must be used for load various resources in inherited class
          * as super.loadSequence() for trigger events
+         * @return void
          */
         loadSequence() {
             for (let i = 0; i < this._beforeLoadCallbacks.length; i++) {
@@ -316,6 +322,7 @@ export const FrameInterface = (function () {
         /**
          * This method must be called in inherited class after complete load
          * of concrete frame as super.loadSequenceComplete()
+         * @return void
          */
         loadSequenceComplete() {
             for (let i = 0; i < this._afterLoadCallbacks.length; i++) {
@@ -333,6 +340,7 @@ export const FrameInterface = (function () {
         /**
          * This method must be used for in inherited class as super.resize()
          * for trigger events
+         * @return void
          */
         resize() {
             for (let i = 0; i < this._onResizeCallbacks.length; i++) {
@@ -350,6 +358,7 @@ export const FrameInterface = (function () {
         /**
          * This method must be implementer in inherited class
          * He makes prepare operations before screen resize
+         * @return void
          */
         prepareResize() {
             for (let i = 0; i < this._onPrepareResizeCallbacks.length; i++) {
@@ -368,6 +377,7 @@ export const FrameInterface = (function () {
          * Hang callback on resize event of this FrameInterface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResize(callback, isOnce = false) {
             this._onResizeCallbacks.push([
@@ -380,6 +390,7 @@ export const FrameInterface = (function () {
          * Hand callback on prepare resize event of this FrameInterface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         omPrepareResize(callback, isOnce = false) {
             this._onPrepareResizeCallbacks.push([
@@ -390,6 +401,8 @@ export const FrameInterface = (function () {
 
         /**
          * This method strike resize desktop callbacks
+         * @private
+         * @return void
          */
         _strikeOnResizeDesktop() {
             for (let i = 0; i < this._onResizeOnDesktopCallbacks.length; i++) {
@@ -406,6 +419,8 @@ export const FrameInterface = (function () {
 
         /**
          * This method strike resize mobile callbacks
+         * @private
+         * @return void
          */
         _strikeOnResizeMobile() {
             for (let i = 0; i < this._onResizeOnMobileCallbacks.length; i++) {
@@ -422,6 +437,8 @@ export const FrameInterface = (function () {
 
         /**
          * This method strike resize bootstrap Xl callbacks
+         * @private
+         * @return void
          */
         _strikeOnResizeBootstrapXl() {
             for (let i = 0; i < this._onResizeOnBootstrapXlCallbacks.length; i++) {
@@ -438,6 +455,8 @@ export const FrameInterface = (function () {
 
         /**
          * This method strike resize bootstrap Lg callbacks
+         * @private
+         * @return void
          */
         _strikeOnResizeBootstrapLg() {
             for (let i = 0; i < this._onResizeOnBootstrapLgCallbacks.length; i++) {
@@ -454,6 +473,8 @@ export const FrameInterface = (function () {
 
         /**
          * This method strike resize bootstrap Md callbacks
+         * @private
+         * @return void
          */
         _strikeOnResizeBootstrapMd() {
             for (let i = 0; i < this._onResizeOnBootstrapMdCallbacks.length; i++) {
@@ -470,6 +491,8 @@ export const FrameInterface = (function () {
 
         /**
          * This method strike resize bootstrap Sm callbacks
+         * @private
+         * @return void
          */
         _strikeOnResizeBootstrapSm() {
             for (let i = 0; i < this._onResizeOnBootstrapSmCallbacks.length; i++) {
@@ -486,6 +509,8 @@ export const FrameInterface = (function () {
 
         /**
          * This method strike resize bootstrap Esm callbacks
+         * @private
+         * @return void
          */
         _strikeOnResizeBootstrapEsm() {
             for (let i = 0; i < this._onResizeOnBootstrapEsmCallbacks.length; i++) {
@@ -506,6 +531,7 @@ export const FrameInterface = (function () {
          * when size was switched in desktop from mobile
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResizeOnDesktop(callback, isOnce = false) {
             this._onResizeOnDesktopCallbacks.push([
@@ -519,6 +545,7 @@ export const FrameInterface = (function () {
          * when size was switched in mobile from desktop
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResizeOnMobile(callback, isOnce = false) {
             this._onResizeOnMobileCallbacks.push([
@@ -532,6 +559,7 @@ export const FrameInterface = (function () {
          * when size was switched in Xl bootstrap from other
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResizeOnBootstrapXl(callback, isOnce = false) {
             this._onResizeOnBootstrapXlCallbacks.push([
@@ -545,6 +573,7 @@ export const FrameInterface = (function () {
          * when size was switched in Lg bootstrap from other
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResizeOnBootstrapLg(callback, isOnce = false) {
             this._onResizeOnBootstrapLgCallbacks.push([
@@ -558,6 +587,7 @@ export const FrameInterface = (function () {
          * when size was switched in Md bootstrap from other
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResizeOnBootstrapMd(callback, isOnce = false) {
             this._onResizeOnBootstrapMdCallbacks.push([
@@ -571,6 +601,7 @@ export const FrameInterface = (function () {
          * when size was switched in Sm bootstrap from other
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResizeOnBootstrapSm(callback, isOnce = false) {
             this._onResizeOnBootstrapSmCallbacks.push([
@@ -584,6 +615,7 @@ export const FrameInterface = (function () {
          * when size was switched in Esm bootstrap from other
          * @param callback
          * @param isOnce
+         * @return void
          */
         onResizeOnBootstrapEsm(callback, isOnce = false) {
             this._onResizeOnBootstrapEsmCallbacks.push([
@@ -595,6 +627,7 @@ export const FrameInterface = (function () {
         /**
          * This method add to frame frame component
          * @param {FrameInterface} frameComponent
+         * @return void
          */
         addComponent(frameComponent) {
             this._frameComponents.push(frameComponent);
@@ -604,6 +637,7 @@ export const FrameInterface = (function () {
          * Remove frame component from queue of implementation
          * But not destroy frame component
          * @param {string} name
+         * @return void
          */
         removeComponent(name) {
             //TODO: make this method
@@ -714,14 +748,13 @@ export const FrameInterface = (function () {
 
                 currentComponent.startSequenceComplete();
             }
-
-
         }
 
         /**
          * Hang callback on start begin event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onStartBegin(callback, isOnce = false) {
             this._startBeginCallbacks.push([
@@ -734,6 +767,7 @@ export const FrameInterface = (function () {
          * Hang callback on start end event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onStartEnd(callback, isOnce = false) {
             this._startEndCallbacks.push([
@@ -836,6 +870,7 @@ export const FrameInterface = (function () {
          * Hang callback on stop begin event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onStopBegin(callback, isOnce = true) {
             this._stopBeginCallbacks.push([
@@ -848,6 +883,7 @@ export const FrameInterface = (function () {
          * Hang callback on stop end event of this frame
          * @param callback
          * @param isOnce
+         * @return void
          */
         onStopEnd(callback, isOnce = true) {
             this._stopEndCallbacks.push([
@@ -856,11 +892,12 @@ export const FrameInterface = (function () {
             ]);
         }
 
-        /**
+        /** TODO: is this method needed???
          * This method must be used in inherited class as super.waitBeginConditions()
          * and after that you must put there initial state of wait state
          * all added frame components also will trigger they waitBeginConditions() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         waitBeginConditions(triggerComponents = true) {
             if (!triggerComponents) return;
@@ -872,11 +909,12 @@ export const FrameInterface = (function () {
             }
         }
 
-        /**
+        /** TODO: is this method needed???
          * This method must be used in inherited class as super.waitSequence()
          * and after that you must put there initial state of reset wait state (after resize for example)
          * all added frame components also will trigger they waitSequence() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         waitResetConditions(triggerComponents = true) {
             for (let i = 0; i < this._frameComponents.length; i++) {
@@ -891,6 +929,7 @@ export const FrameInterface = (function () {
          * and after that you must put there animation of wait state
          * all added frame components also will trigger they waitSequence() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         waitSequence(triggerComponents = true) {
             this._state = STATE_WAIT;
@@ -911,6 +950,7 @@ export const FrameInterface = (function () {
          * He trigger _waitEndCallbacks for this frame interface object
          * all added frame components also will trigger they waitSequenceCompleted() methods
          * @param {boolean} triggerComponents
+         * @return void
          */
         waitSequenceCompleted(triggerComponents = true) {
             this._waitSequenceInProcess = false;
@@ -973,6 +1013,7 @@ export const FrameInterface = (function () {
          * Hang callback on wait begin event of this frame interface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         onWaitBegin(callback, isOnce = true) {
             this._waitBeginCallbacks.push([
@@ -985,6 +1026,7 @@ export const FrameInterface = (function () {
          * Hang callback on wait retry event of this frame interface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         onWaitRetry(callback, isOnce = true) {
             this._waitRetryCallbacks.push([
@@ -997,6 +1039,7 @@ export const FrameInterface = (function () {
          * Hang callback on wait end event of this frame interface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         onWaitEnd(callback, isOnce = true) {
             this._waitEndCallbacks.push([
@@ -1039,6 +1082,7 @@ export const FrameInterface = (function () {
          * Hang callback on off event of this frame interface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         onOff(callback, isOnce = true) {
             this._offCallbacks.push([
@@ -1051,6 +1095,7 @@ export const FrameInterface = (function () {
          * This method must be used in inherited class as super.animationFrame()
          * and putted in animation frames loop
          * @param {boolean} triggerComponents
+         * @return void
          */
         animationFrame(triggerComponents = true) {
             if (!triggerComponents) return;
@@ -1066,6 +1111,7 @@ export const FrameInterface = (function () {
          * Hang callback on begin switch frame event of this frame interface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         onBeginSwitch(callback, isOnce = true) {
             this._onBeginSwitchCallbacks.push([
@@ -1078,6 +1124,7 @@ export const FrameInterface = (function () {
          * Hang callback on end switch frame event of this frame interface object
          * @param callback
          * @param isOnce
+         * @return void
          */
         onEndSwitch(callback, isOnce = true) {
             this._onEndSwitchCallbacks.push([
@@ -1102,7 +1149,7 @@ export const FrameInterface = (function () {
 
         }
 
-        /**
+        /** TODO: Make normal realisation
          * This method must be implemented in inherited class
          * Return string name of frame
          * @returns {string}
