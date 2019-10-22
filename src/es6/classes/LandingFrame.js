@@ -20,7 +20,7 @@ import {FramePointer} from "./FramePointer";
 export const LandingFrame = (function () {
     //This constants needed because constance of FrameInterface not visible there
     const STATE_OFF   = 0;
-    const STATE_BEGIN = 1;
+    const STATE_START = 1;
     const STATE_WAIT  = 2;
     const STATE_STOP  = 3;
 

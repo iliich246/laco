@@ -10,7 +10,7 @@ import {LandingBuilderBase} from "./LandingBuilderBase";
 
 export const FrameInterface = (function () {
     const STATE_OFF   = 0;
-    const STATE_BEGIN = 1;
+    const STATE_START = 1;
     const STATE_WAIT  = 2;
     const STATE_STOP  = 3;
 
@@ -127,11 +127,11 @@ export const FrameInterface = (function () {
         }
 
         /**
-         * Returns true if frame interface object is on begin state
+         * Returns true if frame interface object is on start state
          * @returns {boolean}
          */
-        isStateBegin() {
-            return this._state === STATE_BEGIN;
+        isStateStart() {
+            return this._state === STATE_START;
         }
 
         /**
@@ -161,12 +161,12 @@ export const FrameInterface = (function () {
         }
 
         /**
-         * Set frame interface object in begin state
+         * Set frame interface object in start state
          * @returns {FrameInterface}
          * @protected
          */
-        _setStateBegin() {
-            this._state = STATE_BEGIN;
+        _setStateStart() {
+            this._state = STATE_START;
             return this;
         }
 
@@ -209,7 +209,7 @@ export const FrameInterface = (function () {
          * @param isOnce
          * @return void
          */
-        onInitializationComplete(callback, isOnce = false) {
+        onAfterInitialization(callback, isOnce = false) {
             this._afterInitializationCallbacks.push([
                 callback,
                 isOnce
@@ -304,9 +304,10 @@ export const FrameInterface = (function () {
         /**
          * This method must be used for load various resources in inherited class
          * as super.loadSequence() for trigger events
+         * @param {boolean} triggerComponents
          * @return void
          */
-        loadSequence() {
+        loadAssets(triggerComponents = true) {
             for (let i = 0; i < this._beforeLoadCallbacks.length; i++) {
                 let currentCallback = this._beforeLoadCallbacks[i][0];
 
@@ -317,6 +318,14 @@ export const FrameInterface = (function () {
                 if (this._beforeLoadCallbacks[i][1])
                     this._beforeLoadCallbacks.splice(i--, 1);
             }
+
+            if (!triggerComponents) return;
+
+            for (let i = 0; i < this._frameComponents.length; i++) {
+                let currentComponent = this._frameComponents[i];
+
+                currentComponent.loadAssets();
+            }
         }
 
         /**
@@ -324,7 +333,7 @@ export const FrameInterface = (function () {
          * of concrete frame as super.loadSequenceComplete()
          * @return void
          */
-        loadSequenceComplete() {
+        loadComplete() {
             for (let i = 0; i < this._afterLoadCallbacks.length; i++) {
                 let currentCallback = this._afterLoadCallbacks[i][0];
 
@@ -334,42 +343,6 @@ export const FrameInterface = (function () {
             for (let i = 0; i < this._afterLoadCallbacks.length; i++) {
                 if (this._afterLoadCallbacks[i][1])
                     this._afterLoadCallbacks.splice(i--, 1);
-            }
-        }
-
-        /**
-         * This method must be used for in inherited class as super.resize()
-         * for trigger events
-         * @return void
-         */
-        resize() {
-            for (let i = 0; i < this._onResizeCallbacks.length; i++) {
-                let currentCallback = this._onResizeCallbacks[i][0];
-
-                currentCallback(this);
-            }
-
-            for (let i = 0; i < this._onResizeCallbacks.length; i++) {
-                if (this._onResizeCallbacks[i][1])
-                    this._onResizeCallbacks.splice(i--, 1);
-            }
-        }
-
-        /**
-         * This method must be implementer in inherited class
-         * He makes prepare operations before screen resize
-         * @return void
-         */
-        prepareResize() {
-            for (let i = 0; i < this._onPrepareResizeCallbacks.length; i++) {
-                let currentCallback = this._onPrepareResizeCallbacks[i][0];
-
-                currentCallback(this);
-            }
-
-            for (let i = 0; i < this._onPrepareResizeCallbacks.length; i++) {
-                if (this._onPrepareResizeCallbacks[i][1])
-                    this._onPrepareResizeCallbacks.splice(i--, 1);
             }
         }
 
@@ -392,11 +365,65 @@ export const FrameInterface = (function () {
          * @param isOnce
          * @return void
          */
-        omPrepareResize(callback, isOnce = false) {
+        onPrepareResize(callback, isOnce = false) {
             this._onPrepareResizeCallbacks.push([
                 callback,
                 isOnce
             ]);
+        }
+
+        /**
+         * This method must be used for in inherited class as super.resize()
+         * for trigger events
+         * @param {boolean} triggerComponents
+         * @return void
+         */
+        resize(triggerComponents = true) {
+            for (let i = 0; i < this._onResizeCallbacks.length; i++) {
+                let currentCallback = this._onResizeCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onResizeCallbacks.length; i++) {
+                if (this._onResizeCallbacks[i][1])
+                    this._onResizeCallbacks.splice(i--, 1);
+            }
+
+            if (!triggerComponents) return;
+
+            for (let i = 0; i < this._frameComponents.length; i++) {
+                let currentComponent = this._frameComponents[i];
+
+                currentComponent.resize();
+            }
+        }
+
+        /**
+         * This method must be implementer in inherited class
+         * He makes prepare operations before screen resize
+         * @param {boolean} triggerComponents
+         * @return void
+         */
+        prepareResize(triggerComponents = true) {
+            for (let i = 0; i < this._onPrepareResizeCallbacks.length; i++) {
+                let currentCallback = this._onPrepareResizeCallbacks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._onPrepareResizeCallbacks.length; i++) {
+                if (this._onPrepareResizeCallbacks[i][1])
+                    this._onPrepareResizeCallbacks.splice(i--, 1);
+            }
+
+            if (!triggerComponents) return;
+
+            for (let i = 0; i < this._frameComponents.length; i++) {
+                let currentComponent = this._frameComponents[i];
+
+                currentComponent.prepareResize();
+            }
         }
 
         /**
@@ -524,7 +551,6 @@ export const FrameInterface = (function () {
                     this._onResizeOnBootstrapEsmCallbacks.splice(i--, 1);
             }
         }
-
 
         /**
          * Hang callback on resize event of this frame
@@ -668,7 +694,7 @@ export const FrameInterface = (function () {
          * @return void
          */
         startSequence(triggerComponents = true) {
-            this._state = STATE_BEGIN;
+            this._state = STATE_START;
 
             for (let i = 0; i < this._startBeginCallbacks.length; i++) {
                 let currentCallback = this._startBeginCallbacks[i][0];
@@ -698,7 +724,7 @@ export const FrameInterface = (function () {
          * @return void
          */
         startImmediately(triggerComponents = true) {
-            this._state = STATE_BEGIN;
+            this._state = STATE_START;
 
             for (let i = 0; i < this._startBeginCallbacks.length; i++) {
                 let currentCallback = this._startBeginCallbacks[i][0];
@@ -746,7 +772,7 @@ export const FrameInterface = (function () {
             for (let i = 0; i < this._frameComponents.length; i++) {
                 let currentComponent = this._frameComponents[i];
 
-                currentComponent.startSequenceComplete();
+                currentComponent.startComplete();
             }
         }
 
@@ -756,7 +782,7 @@ export const FrameInterface = (function () {
          * @param isOnce
          * @return void
          */
-        onStartBegin(callback, isOnce = false) {
+        onBeforeStart(callback, isOnce = false) {
             this._startBeginCallbacks.push([
                 callback,
                 isOnce
@@ -769,7 +795,7 @@ export const FrameInterface = (function () {
          * @param isOnce
          * @return void
          */
-        onStartEnd(callback, isOnce = false) {
+        onAfterStart(callback, isOnce = false) {
             this._startEndCallbacks.push([
                 callback,
                 isOnce
@@ -813,7 +839,7 @@ export const FrameInterface = (function () {
          * @param {boolean} triggerComponents
          * @return void
          */
-        stopSequenceCompleted(triggerComponents = true) {
+        stopCompleted(triggerComponents = true) {
             this._state = STATE_OFF;
 
             for (let i = 0; i < this._stopEndCallbacks.length; i++) {
@@ -872,7 +898,7 @@ export const FrameInterface = (function () {
          * @param isOnce
          * @return void
          */
-        onStopBegin(callback, isOnce = true) {
+        onBeforeStop(callback, isOnce = true) {
             this._stopBeginCallbacks.push([
                 callback,
                 isOnce
@@ -885,7 +911,7 @@ export const FrameInterface = (function () {
          * @param isOnce
          * @return void
          */
-        onStopEnd(callback, isOnce = true) {
+        onAfterStop(callback, isOnce = true) {
             this._stopEndCallbacks.push([
                 callback,
                 isOnce
