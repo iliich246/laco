@@ -1175,13 +1175,12 @@ export const FrameInterface = (function () {
 
         }
 
-        /** TODO: Make normal realisation
-         * This method must be implemented in inherited class
+        /**
          * Return string name of frame
          * @returns {string}
          */
-        getFrameName() {
-            return 'NULL';
+        getName() {
+            return this.constructor.name;
         }
 
         /**

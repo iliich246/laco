@@ -58,6 +58,7 @@ export const LandingFrameComponent = (function () {
          */
         getAbsCoordX() {
             console.log('This method like interface and must be implemented in inherited class');
+            return null;
         }
 
         /**
@@ -67,6 +68,7 @@ export const LandingFrameComponent = (function () {
          */
         getAbsCoordY() {
             console.log('This method like interface and must be implemented in inherited class');
+            return null;
         }
 
         /**
@@ -76,6 +78,7 @@ export const LandingFrameComponent = (function () {
          */
         getComponentHeight() {
             console.log('This method like interface and must be implemented in inherited class');
+            return null;
         }
 
         /**
@@ -85,6 +88,7 @@ export const LandingFrameComponent = (function () {
          */
         getComponentWidth() {
             console.log('This method like interface and must be implemented in inherited class');
+            return null;
         }
 
         /**
@@ -382,7 +386,7 @@ export const LandingFrameComponent = (function () {
          * @returns {FramePointer}
          */
         getPointer() {
-            return this.landingFrame.getPointer();
+            return this._landingFrame.getPointer();
         }
 
         /**
@@ -390,7 +394,7 @@ export const LandingFrameComponent = (function () {
          * @returns {FramePointer}
          */
         getGlobalPointer() {
-            return this.landingFrame.landingBuilder.getGlobalPointer();
+            return this._landingFrame.getLandingBuilder().getGlobalPointer();
         }
     }
 
