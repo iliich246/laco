@@ -114,6 +114,12 @@ export const LandingBuilderBase = (function () {
              * @private
              */
             this._isResizePrepared = false;
+            /**
+             * keeps state of console alerts necessity
+             * @type {boolean}
+             * @private
+             */
+            this._needConsoleAlerts = false;
 
             /**
             * Group of resize callbacks arrays
@@ -148,7 +154,32 @@ export const LandingBuilderBase = (function () {
             //Add default switch effect
             //this.addSwitchClass(new DefaultSwitchEffect(this));
 
+            this._configuration(config);
+        }
 
+        /**
+         * Config landing builder object from input config object
+         * @param configObject
+         * @private
+         */
+        _configuration(configObject) {
+
+        }
+
+        /**
+         * Set console alerts state
+         * @param {bool} state
+         */
+        setConsoleAlerts(state) {
+            this._needConsoleAlerts = !!state;
+        }
+
+        /**
+         * Return console alerts state
+         * @returns {boolean}
+         */
+        isConsoleAlertsEnabled() {
+            return this._needConsoleAlerts;
         }
 
         /**

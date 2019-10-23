@@ -22,6 +22,10 @@ export class Frame1 extends LandingFrame {
         this.addComponent(this.component1);
         this.addComponent(this.component2);
         this.addComponent(this.component3);
+
+        this.component3.onClick(() => {
+            console.log('SASAT component 3')
+        })
     }
 
     /**
@@ -221,6 +225,14 @@ class Frame1Component3 extends  LandingFrameComponent {
      */
     initialization(triggerComponents = true) {
         if (!super.initialization()) return false;
+
+        this.cont = $('#comp3');
+
+        $(this.cont).click((event) => {
+            this.externalClick();
+        });
+
+
 
         console.log('Frame1 Component3 init');
 

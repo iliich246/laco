@@ -50,6 +50,19 @@ $(() => {
         console.log('onResizeOnBootstrapEsm rez');
     }, true);
 
+    // landingBuilder.onClick(() => {
+    //     let pointer = landingBuilder.getGlobalPointer();
+    //
+    //     console.log([
+    //         pointer.x,
+    //         pointer.y
+    //     ])
+    // });
+
+    // frame1.onClick(() => {
+    //    console.log('SASAT')
+    // });
+
     //frame1.startSequence();
 
     // landingBuilder.onResizeOnMobile(() => {

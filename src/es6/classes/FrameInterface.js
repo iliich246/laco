@@ -1164,7 +1164,7 @@ export const FrameInterface = (function () {
          * Must return local pointer for this frame
          */
         getPointer() {
-
+            return null;
         }
 
         /**
@@ -1172,7 +1172,7 @@ export const FrameInterface = (function () {
          * Must return global pointer for landing builder owner
          */
         getGlobalPointer() {
-
+            return null;
         }
 
         /**
