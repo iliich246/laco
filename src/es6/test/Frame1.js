@@ -25,7 +25,33 @@ export class Frame1 extends LandingFrame {
 
         this.component3.onClick(() => {
             console.log('SASAT component 3')
-        })
+        });
+
+        this.component3.onMouseMove(() => {
+            console.log('Mouse move component 3')
+        });
+
+        this.component3.onMouseDown(() => {
+            console.log('Mouse down component 3')
+        });
+
+        this.component3.onMouseUp(() => {
+            console.log('Mouse up component 3')
+        });
+
+        this.component3.onTouchDown(() => {
+            console.log('onTouchDown component 3')
+        });
+
+        this.component3.onTouchUp(() => {
+            console.log('onTouchUp component 3')
+        });
+
+        this.component3.onTouchMove(() => {
+            console.log('onTouchMove component 3')
+        });
+
+        //this.component
     }
 
     /**
@@ -232,7 +258,29 @@ class Frame1Component3 extends  LandingFrameComponent {
             this.externalClick();
         });
 
+        $(this.cont).mousemove(() => {
+            this.externalMouseMove();
+        });
 
+        $(this.cont).mousedown(() => {
+            this.externalMouseDown()
+        });
+
+        $(this.cont).mouseup(() => {
+            this.externalMouseUp()
+        });
+
+        document.getElementById('comp3').addEventListener("touchstart", (event) => {
+            this.externalTouchDown();
+        });
+
+        document.getElementById('comp3').addEventListener("touchend", (event) => {
+            this.externalTouchUp();
+        });
+
+        document.getElementById('comp3').addEventListener("touchmove", (event) => {
+            this.externalTouchMove();
+        });
 
         console.log('Frame1 Component3 init');
 
