@@ -147,7 +147,8 @@ export const LandingBuilderBase = (function () {
             this._pointerUpCallbacks       = [];
             this._pointerActiveMove        = [];
             this._clickCallbacks           = [];
-            this._switchCallbaks           = [];
+            this._switchBeginCallbaks      = [];
+            this._switchEndCallbaks        = [];
 
             this._switchThemeCallbacks     = [];
 
@@ -515,19 +516,36 @@ export const LandingBuilderBase = (function () {
         }
 
         /**
-         * Strike switch callbacks
+         * Strike switch begin callbacks
          * @private
          */
-        _strikeSwitchCallbacks() {
-            for (let i = 0; i < this._switchCallbaks.length; i++) {
-                let currentCallback = this._switchCallbaks[i][0];
+        _strikeSwitchBeginCallbacks() {
+            for (let i = 0; i < this._switchBeginCallbaks.length; i++) {
+                let currentCallback = this._switchBeginCallbaks[i][0];
 
                 currentCallback(this);
             }
 
-            for (let i = 0; i < this._switchCallbaks.length; i++) {
-                if (this._switchCallbaks[i][1])
-                    this._switchCallbaks.splice(i--, 1);
+            for (let i = 0; i < this._switchBeginCallbaks.length; i++) {
+                if (this._switchBeginCallbaks[i][1])
+                    this._switchBeginCallbaks.splice(i--, 1);
+            }
+        }
+
+        /**
+         * Strike switch end callbacks
+         * @private
+         */
+        _strikeSwitchEndCallbacks() {
+            for (let i = 0; i < this._switchEndCallbaks.length; i++) {
+                let currentCallback = this._switchEndCallbaks[i][0];
+
+                currentCallback(this);
+            }
+
+            for (let i = 0; i < this._switchEndCallbaks.length; i++) {
+                if (this._switchEndCallbaks[i][1])
+                    this._switchEndCallbaks.splice(i--, 1);
             }
         }
 
@@ -551,9 +569,10 @@ export const LandingBuilderBase = (function () {
 
             switchEffect.onComplete(() => {
                 this._isSwithcAble = true;
+                this._strikeSwitchEndCallbacks();
             }, true);
 
-            this._strikeSwitchCallbacks();
+            this._strikeSwitchBeginCallbacks();
 
             switchEffect.effectSequence();
 
@@ -580,9 +599,10 @@ export const LandingBuilderBase = (function () {
 
             switchEffect.onComplete(() => {
                 this._isSwithcAble = true;
+                this._strikeSwitchEndCallbacks();
             }, true);
 
-            this._strikeSwitchCallbacks();
+            this._strikeSwitchBeginCallbacks();
 
             switchEffect.effectSequence();
 
@@ -624,9 +644,10 @@ export const LandingBuilderBase = (function () {
 
             switchEffect.onComplete(() => {
                 this._isSwithcAble = true;
+                this._strikeSwitchEndCallbacks();
             }, true);
 
-            this._strikeSwitchCallbacks();
+            this._strikeSwitchBeginCallbacks();
 
             switchEffect.effectSequence();
 
