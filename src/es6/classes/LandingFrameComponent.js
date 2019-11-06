@@ -428,7 +428,7 @@ export const LandingFrameComponent = (function () {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
-                    this.localPointer._mouseIsActive = false;
+                    this._localPointer._mouseIsActive = false;
                     callback();
                 }
             }, isOnce);
@@ -478,7 +478,7 @@ export const LandingFrameComponent = (function () {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
-                    this.localPointer._mouseIsActive = false;
+                    this._localPointer._mouseIsActive = false;
                     callback();
                 }
             }, isOnce);
@@ -530,7 +530,7 @@ export const LandingFrameComponent = (function () {
                 if ((pointer._mouseX > this.getAbsCoordX() && pointer._mouseX < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer._mouseY > this.getAbsCoordY() && pointer._mouseY < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
-                    this.localPointer._mouseIsActive = false;
+                    this._localPointer._mouseIsActive = false;
                     callback();
                 }
             }, isOnce);
@@ -583,8 +583,8 @@ export const LandingFrameComponent = (function () {
                 if ((pointer.x > this.getAbsCoordX() && pointer.x < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer.y > this.getAbsCoordY() && pointer.y < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
-                    this.localPointer.x = -this.getAbsCoordX() + pointer.x;
-                    this.localPointer.y = -this.getAbsCoordY() + pointer.y;
+                    this._localPointer.x = -this.getAbsCoordX() + pointer.x;
+                    this._localPointer.y = -this.getAbsCoordY() + pointer.y;
                     callback();
                 }
             }, isOnce);
@@ -629,8 +629,8 @@ export const LandingFrameComponent = (function () {
                 if ((pointer.x > this.getAbsCoordX() && pointer.x < this.getAbsCoordX() + this.getComponentWidth()) &&
                     (pointer.y > this.getAbsCoordY() && pointer.y < this.getAbsCoordY() + this.getComponentHeight())
                 ) {
-                    this.localPointer.x = -this.getAbsCoordX() + pointer.x;
-                    this.localPointer.y = -this.getAbsCoordY() + pointer.y;
+                    this._localPointer.x = -this.getAbsCoordX() + pointer.x;
+                    this._localPointer.y = -this.getAbsCoordY() + pointer.y;
                     callback();
                 }
             }, isOnce);

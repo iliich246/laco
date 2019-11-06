@@ -97,9 +97,9 @@ $(() => {
 
     frame1.initialization();
     frame1.startSequence();
-    frame1.stopSequence();
-    frame1.offSequence();
-    frame1.animationFrame();
+    // frame1.stopSequence();
+    // frame1.offSequence();
+    // frame1.animationFrame();
 
     console.log(frame1.getName())
     // landingBuilder.add(frame1);

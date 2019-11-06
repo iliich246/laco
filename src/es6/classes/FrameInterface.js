@@ -753,7 +753,7 @@ export const FrameInterface = (function () {
          * @param {boolean} triggerComponents
          * @return void
          */
-        startComplete(triggerComponents = true) {
+        startCompleted(triggerComponents = true) {
             this._state = STATE_WAIT;
 
             for (let i = 0; i < this._startEndCallbacks.length; i++) {
@@ -772,7 +772,7 @@ export const FrameInterface = (function () {
             for (let i = 0; i < this._frameComponents.length; i++) {
                 let currentComponent = this._frameComponents[i];
 
-                currentComponent.startComplete();
+                currentComponent.startCompleted();
             }
         }
 

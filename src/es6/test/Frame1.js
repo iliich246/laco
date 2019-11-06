@@ -116,6 +116,8 @@ class Frame1Component1 extends  LandingFrameComponent {
     initialization(triggerComponents = true) {
         if (!super.initialization()) return false;
 
+        this.element = $('#frame_component1');
+
         console.log('Frame1 Component1 init');
 
         return true;
@@ -127,6 +129,11 @@ class Frame1Component1 extends  LandingFrameComponent {
     startConditions(triggerComponents = true) {
         super.startConditions(triggerComponents);
 
+        $(this.element).velocity({
+            translateX: '-100px',
+            opacity: 0
+        }).velocity('finish');
+
         console.log('Frame1 Component1 startConditions');
     }
 
@@ -136,6 +143,16 @@ class Frame1Component1 extends  LandingFrameComponent {
     startSequence(triggerComponents = true) {
         super.startConditions(triggerComponents);
 
+        $(this.element).velocity({
+            translateX: '0px',
+            opacity: 1
+        }, {
+            duration: 2000,
+            complete: () => {
+                this.startCompleted();
+            }
+        });
+
         console.log('Frame1 Component1 startSequence');
     }
 
@@ -144,6 +161,16 @@ class Frame1Component1 extends  LandingFrameComponent {
      */
     stopSequence(triggerComponents = true) {
         super.stopSequence(triggerComponents);
+
+        $(this.element).velocity({
+            translateX: '-100px',
+            opacity: 0
+        }, {
+            duration: 2000,
+            complete: () => {
+                this.stopCompleted();
+            }
+        });
 
         console.log('Frame1 Component1 stopSequence');
     }
@@ -175,7 +202,9 @@ class Frame1Component2 extends  LandingFrameComponent {
      * Constructor
      */
     constructor(landingFrame) {
-        super(landingFrame)
+        super(landingFrame);
+
+        this.element = $('#frame_component2');
     }
 
     /**
@@ -195,6 +224,11 @@ class Frame1Component2 extends  LandingFrameComponent {
     startConditions(triggerComponents = true) {
         super.startConditions(triggerComponents);
 
+        $(this.element).velocity({
+            translateX: '+100px',
+            opacity: 0
+        }).velocity('finish');
+
         console.log('Frame1 Component2 startConditions');
     }
 
@@ -204,6 +238,16 @@ class Frame1Component2 extends  LandingFrameComponent {
     startSequence(triggerComponents = true) {
         super.startConditions(triggerComponents);
 
+        $(this.element).velocity({
+            translateX: '0px',
+            opacity: 1
+        }, {
+            duration: 2000,
+            complete: () => {
+                this.startCompleted();
+            }
+        });
+
         console.log('Frame1 Component2 startSequence');
     }
 
@@ -212,6 +256,16 @@ class Frame1Component2 extends  LandingFrameComponent {
      */
     stopSequence(triggerComponents = true) {
         super.stopSequence(triggerComponents);
+
+        $(this.element).velocity({
+            translateX: '+100px',
+            opacity: 0
+        }, {
+            duration: 2000,
+            complete: () => {
+                this.stopCompleted();
+            }
+        });
 
         console.log('Frame1 Component2 stopSequence');
     }
@@ -253,6 +307,7 @@ class Frame1Component3 extends  LandingFrameComponent {
         if (!super.initialization()) return false;
 
         this.cont = $('#comp3');
+        this.element = $('#frame_component3');
 
         $(this.cont).click((event) => {
             this.externalClick();
@@ -293,6 +348,11 @@ class Frame1Component3 extends  LandingFrameComponent {
     startConditions(triggerComponents = true) {
         super.startConditions(triggerComponents);
 
+        $(this.element).velocity({
+            translateY: '+100px',
+            opacity: 0
+        }).velocity('finish');
+
         console.log('Frame1 Component3 startConditions');
     }
 
@@ -302,6 +362,16 @@ class Frame1Component3 extends  LandingFrameComponent {
     startSequence(triggerComponents = true) {
         super.startConditions(triggerComponents);
 
+        $(this.element).velocity({
+            translateY: '0px',
+            opacity: 1
+        }, {
+            duration: 2000,
+            complete: () => {
+                this.startCompleted();
+            }
+        });
+
         console.log('Frame1 Component3 startSequence');
     }
 
@@ -310,6 +380,16 @@ class Frame1Component3 extends  LandingFrameComponent {
      */
     stopSequence(triggerComponents = true) {
         super.stopSequence(triggerComponents);
+
+        $(this.element).velocity({
+            translateY: '+100px',
+            opacity: 0
+        }, {
+            duration: 2000,
+            complete: () => {
+                this.stopCompleted();
+            }
+        });
 
         console.log('Frame1 Component3 stopSequence');
     }
