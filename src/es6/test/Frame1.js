@@ -2,11 +2,12 @@ import 'velocity-animate';
 
 import {LandingFrame} from "../classes/LandingFrame";
 import { LandingFrameComponent } from "../classes/LandingFrameComponent";
+import { ScrollableFrame } from "../classes/ScrollableFrame";
 
 /**
  *
  */
-export class Frame1 extends LandingFrame {
+export class Frame1 extends ScrollableFrame {
     /**
      * Constructor
      * @param frameContainer
@@ -51,6 +52,26 @@ export class Frame1 extends LandingFrame {
             console.log('onTouchMove component 3')
         });
 
+        this.onSwipeDown(() => {
+            console.log('swipe down');
+        });
+
+        this.onMouseWheelUp(() => {
+            console.log('wheel up');
+
+            $('.scroll-cont-internal').css({
+                top: '+=10px'
+            })
+        });
+
+        this.onMouseWheelDown(() => {
+            console.log('wheel down');
+
+            $('.scroll-cont-internal').css({
+                top: '-=10px'
+            })
+        });
+
         //this.component
     }
 
@@ -58,7 +79,9 @@ export class Frame1 extends LandingFrame {
      * @inheritDoc
      */
     initialization(triggerComponents = true) {
-        if (!super.initialization()) return false;
+        console.log(this);
+
+        if (!super.initialization(triggerComponents)) return false;
 
         console.log('Frame1 init');
 
@@ -67,6 +90,7 @@ export class Frame1 extends LandingFrame {
         function _animation() {
             requestAnimationFrame(_animation);
             that.animationFrame();
+
         }
 
         //_animation();
@@ -97,6 +121,13 @@ export class Frame1 extends LandingFrame {
     offSequence(triggerComponents = true) {
         super.offSequence();
     }
+
+    animationFrame() {
+        super.animationFrame();
+
+        //console.log('aaa');
+    }
+
 }
 
 /**
@@ -190,7 +221,7 @@ class Frame1Component1 extends  LandingFrameComponent {
     animationFrame(triggerComponents = true) {
         super.animationFrame(triggerComponents);
 
-        console.log('anim1');
+        //console.log('anim1');
     }
 }
 
@@ -285,7 +316,7 @@ class Frame1Component2 extends  LandingFrameComponent {
     animationFrame(triggerComponents = true) {
         super.animationFrame(triggerComponents);
 
-        console.log('anim2');
+        //console.log('anim2');
     }
 }
 
@@ -409,6 +440,6 @@ class Frame1Component3 extends  LandingFrameComponent {
     animationFrame(triggerComponents = true) {
         super.animationFrame(triggerComponents);
 
-        console.log('anim3');
+        //console.log('anim3');
     }
 }

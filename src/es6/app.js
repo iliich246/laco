@@ -95,13 +95,16 @@ $(() => {
 
     //console.log(frame1);
 
-    frame1.initialization();
-    frame1.startSequence();
+    //frame1.initialization();
+    _.delay(() => {
+        //frame1.startSequence();
+    }, 150);
+
     // frame1.stopSequence();
     // frame1.offSequence();
     // frame1.animationFrame();
 
-    console.log(frame1.getName())
+    //console.log(frame1.getName())
     // landingBuilder.add(frame1);
     // landingBuilder.add(frame2);
     // landingBuilder.add(frame3);

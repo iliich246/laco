@@ -252,6 +252,14 @@ export const LandingFrame = (function () {
         }
 
         /**
+         * Return current frame container
+         * @return {HTMLElement}
+         */
+        getFrameContainer() {
+            return this._frameContainer;
+        }
+
+        /**
          * Hang callback on click event of this frame
          * @param callback
          * @param isOnce

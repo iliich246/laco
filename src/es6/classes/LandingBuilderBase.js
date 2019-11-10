@@ -45,6 +45,7 @@ export const LandingBuilderBase = (function () {
     class LandingBuilderBase {
         /**
          * Constructor
+         * @param config
          */
         constructor(config) {
             /**
