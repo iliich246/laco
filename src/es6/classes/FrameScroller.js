@@ -28,6 +28,8 @@ export const FrameScroller = (function() {
             this.scrollPercentCallbacks = [];
 
             this.scrollPixelsCallbacks = [];
+
+            this._currentScrollPosition = 0;
         }
 
         /**
@@ -101,28 +103,66 @@ export const FrameScroller = (function() {
             // });
             this._handleConfig();
 
+            $(this._scrollerContainer).on('mousewheel', (event) => {
+                if (event.originalEvent.deltaY < 0) {//wheel up
+                    this.scrollForward(10);
+                } else {
+                    this.scrollBackward(10);
+                }
+            });
+
         }
 
         _handleConfig() {
+            let containerLength =  $(this._scrollerContainer)
+                .find('.scroll-cont-internal')
+                .height();
+
+            console.log(containerLength);
+
             for (let i = 0; i < this._configArray.length; i++) {
                 let currentConfigElement = this._configArray[i];
 
-                let t = currentConfigElement[0];
+                let triggerValue = currentConfigElement[0];
 
-                if ()
-                console.log(/%$/.test(t));
+                let lastVal = 0;
+
+                if (/%$/.test(triggerValue)) {
+
+                    let numberVal = triggerValue.slice(0, -1);
+
+
+
+                }
+                //console.log(/%$/.test(t));
             }
 
 
         }
 
 
-        scrollForvard(value) {
+        scrollForward(value) {
+            $(this._scrollerContainer).find('.scroll-cont-internal').css({
+                top: '+=10px'
+            });
 
+            this._currentScrollPosition += 10;
+
+            $('.dragger-vertical').css({
+                top: -this._currentScrollPosition
+            });
         }
 
         scrollBackward(value) {
+            $(this._scrollerContainer).find('.scroll-cont-internal').css({
+                top: '-=10px'
+            });
 
+            this._currentScrollPosition -= 10;
+
+            $('.dragger-vertical').css({
+                top: -this._currentScrollPosition
+            });
         }
 
         recalculate() {
