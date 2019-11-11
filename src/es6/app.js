@@ -96,9 +96,9 @@ $(() => {
     //console.log(frame1);
 
     //frame1.initialization();
-    _.delay(() => {
-        //frame1.startSequence();
-    }, 150);
+    //_.delay(() => {
+        frame1.startSequence();
+    //}, 150);
 
     // frame1.stopSequence();
     // frame1.offSequence();

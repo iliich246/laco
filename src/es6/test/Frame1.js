@@ -56,21 +56,27 @@ export class Frame1 extends ScrollableFrame {
             console.log('swipe down');
         });
 
-        this.onMouseWheelUp(() => {
-            console.log('wheel up');
+        // this.onMouseWheelUp(() => {
+        //     console.log('wheel up');
+        //
+        //     $('.scroll-cont-internal').css({
+        //         top: '+=10px'
+        //     })
+        // });
+        //
+        // this.onMouseWheelDown(() => {
+        //     console.log('wheel down');
+        //
+        //     $('.scroll-cont-internal').css({
+        //         top: '-=10px'
+        //     })
+        // });
 
-            $('.scroll-cont-internal').css({
-                top: '+=10px'
-            })
-        });
-
-        this.onMouseWheelDown(() => {
-            console.log('wheel down');
-
-            $('.scroll-cont-internal').css({
-                top: '-=10px'
-            })
-        });
+        this.setScrollConfig([
+            ['30%', 0.5],
+            ['50%', 1.0],
+            ['800px', 0.8]
+        ]);
 
         //this.component
     }
@@ -339,6 +345,8 @@ class Frame1Component3 extends  LandingFrameComponent {
 
         this.cont = $('#comp3');
         this.element = $('#frame_component3');
+
+
 
         $(this.cont).click((event) => {
             this.externalClick();
