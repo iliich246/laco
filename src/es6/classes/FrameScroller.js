@@ -20,8 +20,36 @@ export const FrameScroller = (function() {
              * @private
              */
             this._scrollerContainer = null;
+            /**
+             *
+             * @type {Array}
+             * @private
+             */
             this._configArray = [];
-            //this.
+            /**
+             *
+             * @type {null}
+             * @private
+             */
+            this._scrollerExternalContainer = null;
+            /**
+             *
+             * @type {null}
+             * @private
+             */
+            this._scrollerInternalContainer = null;
+            /**
+             *
+             * @type {null}
+             * @private
+             */
+            this._draggerVertical = null;
+            /**
+             *
+             * @type {number}
+             * @private
+             */
+            this._draggerLength = 0;
 
             this.scrollCallbacks = [];
 
@@ -30,6 +58,8 @@ export const FrameScroller = (function() {
             this.scrollPixelsCallbacks = [];
 
             this._currentScrollPosition = 0;
+
+
         }
 
         /**
@@ -82,8 +112,12 @@ export const FrameScroller = (function() {
             });
 
             $(this._scrollerContainer).append('<div class="scroll-cont-external"></div>');
-            $(this._scrollerContainer).find('.scroll-cont-external').append('<div class="scroll-cont-internal"></div>')
-            $(this._scrollerContainer).find('.scroll-cont-internal').append(content);
+            this._scrollerExternalContainer = $(this._scrollerContainer).find('.scroll-cont-external');
+
+            $(this._scrollerExternalContainer).append('<div class="scroll-cont-internal"></div>');
+
+            this._scrollerInternalContainer = $(this._scrollerContainer).find('.scroll-cont-internal');
+            $(this._scrollerInternalContainer).append(content);
 
             $(this._scrollerContainer).append('<div class="scrollbar"></div>')
                 .find('.scrollbar')
@@ -94,13 +128,9 @@ export const FrameScroller = (function() {
                     '</div>')
                 .append('<span class="button-backward"></span>');
 
-            // $(this._scrollerContainer).find('.dragger-vertical').hover(() => {
-            //     console.log('hover1')
-            // });
-            //
-            // $(this._scrollerContainer).find('.dragger-vertical').mousemove((event) => {
-            //     console.log(event);
-            // });
+            this._draggerVertical = $(this._scrollerContainer).find('.dragger-vertical');
+
+            this._calculateDraggerLength();
             this._handleConfig();
 
             $(this._scrollerContainer).on('mousewheel', (event) => {
@@ -113,6 +143,24 @@ export const FrameScroller = (function() {
 
         }
 
+        /**
+         *
+         * @private
+         */
+        _calculateDraggerLength() {
+            if ($(this._scrollerInternalContainer).height() / $(this._scrollerContainer).height() > 2) {
+                this._draggerLength = $(this._scrollerContainer).height() * 0.1;
+            } else {
+                this._draggerLength = $(this._scrollerContainer).height() * 0.5;
+            }
+            
+            $(this._draggerVertical).height(this._draggerLength);
+        }
+
+        /**
+         *
+         * @private
+         */
         _handleConfig() {
             let containerLength =  $(this._scrollerContainer)
                 .find('.scroll-cont-internal')
@@ -147,6 +195,8 @@ export const FrameScroller = (function() {
             });
 
             this._currentScrollPosition += 10;
+
+
 
             $('.dragger-vertical').css({
                 top: -this._currentScrollPosition
